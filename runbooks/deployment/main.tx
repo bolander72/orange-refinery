@@ -1,0 +1,23 @@
+################################################################
+# Manage vault deployment through Crypto Infrastructure as Code
+################################################################
+
+addon "svm" {
+    rpc_api_url = input.rpc_api_url
+    network_id = input.network_id
+}
+
+action "deploy_vault_program" "svm::deploy_program" {
+    description = "Deploy vault program"
+    program = {
+        binary = "programs/vault/target/deploy/vault.so"
+        keypair = "programs/vault/target/deploy/vault-keypair.json"
+    }
+    authority_keypair_json = input.authority_keypair_json
+    payer_keypair_json = input.payer_keypair_json
+    // Optional: if you want to deploy the program via a cheatcode when targeting a Surfnet, set `instant_surfnet_deployment = true`
+    // Deploying via a cheatcode will write the program data directly to the program account, rather than sending transactions.
+    // This will make deployments instantaneous, but is deviating from how the deployments will take place on devnet/mainnet.
+    instant_surfnet_deployment = true
+}
+
